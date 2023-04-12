@@ -1,0 +1,23 @@
+﻿@page "/addFlight"
+@using IAODBV1.Models;
+<h3>AddUpdateFlight</h3>
+ <EditForm Model="model">
+    <div class="mb-3">
+        <label for="FlightNo" class="form-label">Flight No </label>
+        <InputText @bind-Value="model.FlightNo" class="form-control" id="FlightNo" aria-describedby="Flighthelp" />
+        <div id="FlightHelp" class="form-text">Flight number mustbe enter.</div>
+    </div>
+    <div class="mb-3">
+        <label for="Flight Route" class="form-label">Flight Route</label>
+        <InputText @bind-Value="model.Route" class="form-control" id="FlightNo" aria-describedby="Flighthelp" />
+    </div>
+    <div class="mb-3">
+        <label for="Flight Route" class="form-label">Flight Route</label>
+        <InputText @bind-Value="model.Route" class="form-control" id="FlightNo" aria-describedby="Flighthelp" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    FlightModel model = new FlightModel();
+}
