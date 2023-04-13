@@ -1,23 +1,104 @@
-﻿@page "/addFlight"
+﻿@page "/addflight"
 @using IAODBV1.Models;
 <h3>AddUpdateFlight</h3>
- <EditForm Model="model">
+<EditForm Model="model" OnValidSubmit="@ValidFormSubmitted">
+   <DataAnnotationsValidator/>
+   <ValidationSummary />
     <div class="mb-3">
         <label for="FlightNo" class="form-label">Flight No </label>
         <InputText @bind-Value="model.FlightNo" class="form-control" id="FlightNo" aria-describedby="Flighthelp" />
+        <ValidationMessage For="@(() => model.FlightNo)" />
         <div id="FlightHelp" class="form-text">Flight number mustbe enter.</div>
     </div>
     <div class="mb-3">
         <label for="Flight Route" class="form-label">Flight Route</label>
         <InputText @bind-Value="model.Route" class="form-control" id="FlightNo" aria-describedby="Flighthelp" />
+        <ValidationMessage For="@(() => model.Route)" />
     </div>
     <div class="mb-3">
-        <label for="Flight Route" class="form-label">Flight Route</label>
-        <InputText @bind-Value="model.Route" class="form-control" id="FlightNo" aria-describedby="Flighthelp" />
+        <label for="Flight ArrDep" class="form-label">Flight ArrDep</label>
+        <InputSelect class="form-select"  @bind-Value="model.ArrDep">
+            <option>--------</option>
+            <option value="A">A-Arival</option>
+            <option value="D">D-Departure</option>
+        </InputSelect>
+        <ValidationMessage For="@(() => model.ArrDep)" />
+    </div>
+    <div class="mb-3">
+        <label for="Flight Status" class="form-label">Flight Status</label>
+        <InputSelect class="form-select" @bind-Value="model.Status">
+            <option value="OPN">Open</option>
+            <option value="CLS">Close</option>
+            <option value="CNX">Cancel</option>
+        </InputSelect>
+    </div>
+    <div class="mb-3">
+        <label for="Flight Depature Gate" class="form-label">Depature Gate</label>
+        <InputText @bind-Value="model.DGATE" class="form-control" id="Dgate" />
+    </div>
+    <div class="mb-3">
+        <label for="Flight Depature Gate" class="form-label">Arival Gate</label>
+        <InputText @bind-Value="model.AGATE" class="form-control" id="Agate" />
+    </div>
+    <div class="mb-3">
+        <label for="DPRK" class="form-label">Departure parking Bay</label>
+        <InputText @bind-Value="model.DPRK" class="form-control" id="Dprk" />
+    </div>
+    <div class="mb-3">
+        <label for="Aprk" class="form-label">Arival parking Bay</label>
+        <InputText @bind-Value="model.APRK" class="form-control" id="Aprk" />
+    </div>
+    <div class="mb-3">
+        <label for="actype" class="form-label">Actype</label>
+        <InputText @bind-Value="model.AcType" class="form-control" id="AcType" />
+    </div>
+    <div class="mb-3">
+        <label for="acRegno" class="form-label">acRegno</label>
+        <InputText @bind-Value="model.AcRegNo" class="form-control" id="acRegno" />
+    </div>
+    <div class="mb-3">
+        <label for="Belt" class="form-label">Flight Belt</label>
+        <InputText @bind-Value="model.Belt" class="form-control" id="Belt" />
+    </div>
+    <div class="mb-3">
+        <label for="Terminal" class="form-label">Flight Terminal</label>
+        <InputSelect class="form-select" @bind-Value="model.Terminal">
+            <option value="Terminal 1">Terminal 1</option>
+            <option value="Terminal 2">Terminal 2</option>
+        </InputSelect>
+    </div>
+    <div class="mb-3">
+        <label for="FlightType" class="form-label">Flight Type</label>
+        <InputText @bind-Value="model.FlightType" class="form-control" id="FlightType" />
+    </div>
+    <div class="mb-3">
+        <label for="SOBT" class="form-label">ScheduledTime Departure</label>
+        <InputText @bind-Value="model.SOBT" class="form-control" id="SOBT" />
+    </div>
+    <div class="mb-3">
+        <label for="SIBT" class="form-label">ScheduledTime Arrival</label>
+        <InputText @bind-Value="model.SIBT" class="form-control" id="SIBT" />
+    </div>
+    <div class="mb-3">
+        <label for="ATOT" class="form-label">ActualTime Departure</label>
+        <InputText @bind-Value="model.ATOT" class="form-control" id="ATOT" />
+    </div>
+    <div class="mb-3">
+        <label for="ALDT" class="form-label">ActualTime Arrival</label>
+        <InputText @bind-Value="model.ALDT" class="form-control" id="ALDT" />
+    </div>
+    <div class="mb-3">
+        <label for="EOBT" class="form-label">Estimated ActualTime Departure</label>
+        <InputText @bind-Value="model.EOBT" class="form-control" id="EOBT" />
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
 
 @code {
     FlightModel model = new FlightModel();
+
+    void ValidFormSubmitted(EditContext editContext)
+    {
+        var strings = model.FlightDate.ToString();
+    }
 }
