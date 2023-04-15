@@ -12,8 +12,11 @@ namespace IAODBV1.Services
         Task<List<FlightModel>> GetAllFlight();
         Task<bool> AddFlight(FlightModel model);
 
-        Task<FlightModel> UpdateFlight(FlightModel model);
+        Task<FlightModel> UpdateFlight(string FlightID,FlightModel model);
+
+
 
         Task<bool> DeleteFlight(FlightModel model);
+        Task<FlightModel> GetFlightDetailByFlightID(string FlightID);
     }
 }

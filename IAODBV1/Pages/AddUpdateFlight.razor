@@ -1,6 +1,10 @@
 ﻿@page "/addflight"
+@page "/updateflight/{FlightId}"
 @using IAODBV1.Models;
-<h3>AddUpdateFlight</h3>
+@using IAODBV1.Services;
+@inject IFlightServices flighhtservices;
+@inject NavigationManager navigationManager;
+<center><h3>Flight information</h3></center>
 <EditForm Model="model" OnValidSubmit="@ValidFormSubmitted">
    <DataAnnotationsValidator/>
    <ValidationSummary />
@@ -27,6 +31,7 @@
     <div class="mb-3">
         <label for="Flight Status" class="form-label">Flight Status</label>
         <InputSelect class="form-select" @bind-Value="model.Status">
+            <option>--------</option>
             <option value="OPN">Open</option>
             <option value="CLS">Close</option>
             <option value="CNX">Cancel</option>
@@ -41,11 +46,11 @@
         <InputText @bind-Value="model.AGATE" class="form-control" id="Agate" />
     </div>
     <div class="mb-3">
-        <label for="DPRK" class="form-label">Departure parking Bay</label>
+        <label for="DPRK" class="form-label">Departure</label>
         <InputText @bind-Value="model.DPRK" class="form-control" id="Dprk" />
     </div>
     <div class="mb-3">
-        <label for="Aprk" class="form-label">Arival parking Bay</label>
+        <label for="Aprk" class="form-label">Arival</label>
         <InputText @bind-Value="model.APRK" class="form-control" id="Aprk" />
     </div>
     <div class="mb-3">
@@ -63,6 +68,7 @@
     <div class="mb-3">
         <label for="Terminal" class="form-label">Flight Terminal</label>
         <InputSelect class="form-select" @bind-Value="model.Terminal">
+            <option>--------</option>
             <option value="Terminal 1">Terminal 1</option>
             <option value="Terminal 2">Terminal 2</option>
         </InputSelect>
@@ -91,14 +97,54 @@
         <label for="EOBT" class="form-label">Estimated ActualTime Departure</label>
         <InputText @bind-Value="model.EOBT" class="form-control" id="EOBT" />
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <center><button type="submit" class="btn btn-success">Add or Update Flight information</button></center>
+    <p></p>
 </EditForm>
 
 @code {
     FlightModel model = new FlightModel();
 
-    void ValidFormSubmitted(EditContext editContext)
+    [Parameter]
+    public string FlightId { set; get; }
+
+    protected override async Task OnInitializedAsync()
     {
-        var strings = model.FlightDate.ToString();
+        if (!String.IsNullOrEmpty(FlightId)){
+            model = await flighhtservices.GetFlightDetailByFlightID(FlightId);
+            Console.WriteLine(model.DPRK);
+        }
+       
+    }
+
+    private async void ValidFormSubmitted(EditContext editContext)
+    {
+       if(!String.IsNullOrEmpty(FlightId))
+       {
+           //Update Flight
+            var resut = await flighhtservices.UpdateFlight(FlightId,model);
+            if (resut != null)
+            {
+                await App.Current.MainPage.DisplayAlert("Flight Updated", "Flight Updated Successfully", "OK");
+                navigationManager.NavigateTo("/");
+            }
+            else{
+                await App.Current.MainPage.DisplayAlert("Oops", "Error ", "OK");
+            }
+
+       }else{
+            //Add Flight
+            model.FlightDate = DateTime.UtcNow;
+            var resut = await flighhtservices.AddFlight(model);
+            if (resut)
+            {
+                await App.Current.MainPage.DisplayAlert("Flight Added", "Flight Added Successfully", "OK");
+                navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                Console.WriteLine("Ko Them Duoc");
+                await App.Current.MainPage.DisplayAlert("Oops", "Error ", "OK");
+            }
+       }
     }
 }

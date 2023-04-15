@@ -2,6 +2,7 @@
 @using IAODBV1.Services
 @using IAODBV1.Models;
 @inject IFlightServices fligtservices;
+@inject NavigationManager navigationManager;
 <h1>Flight in BASE DAD</h1>
 @if(flights == null){
     <div class="d-flex justify-content-center">
@@ -10,30 +11,24 @@
         </div>
     </div>
 }else{
+    <center>
     <div class="table">
         <thead>
             <tr>
                 <th scope="col">FlightNo</th>
                 <th scope="col">Route</th>
-                <th scope="col">Status</th>
-                <th scope="col">DGATE</th>
-                <th scope="col">AGATE</th>
-                <th scope="col">AcType</th>
-                <th scope="col">Belt</th>
-                <th scope="col">Schedule Depatuture SOBT</th>
-                <th scope="col">Schedule Arrival SIBT</th>
+              
+                <th scope="col">Depature </th>
+                <th scope="col">Arival </th>
             </tr>
         </thead>
         <tbody>
             @foreach(var flight in flights){
-                <tr>
+                    <tr @onclick="@(()=>DisplayOption(flight))">
                     <th scope="row">@flight.FlightNo</th>
                     <td>@flight.Route</td>
-                    <td>@flight.Status</td>
-                    <td>@flight.DGATE</td>
-                    <td>@flight.AGATE</td>
-                    <td>@flight.AcType</td>
-                    <td>@flight.Belt</td>
+                   
+                
                     <td>@flight.SOBT</td>
                     <td>@flight.SIBT</td>
                 </tr>
@@ -41,6 +36,7 @@
             
         </tbody>
     </div>
+    </center>
 }
 
 @code{
@@ -48,6 +44,19 @@
     protected override async Task OnInitializedAsync()
     {
         flights = await fligtservices.GetAllFlight();
-       
+
+    }
+    private async void DisplayOption(FlightModel flightModel)
+    {
+        var response = await App.Current.MainPage.DisplayActionSheet("Select Option", "OK", null, "Update Flight", "Delete Flight");
+
+        if (response == "Update Flight")
+        {
+            navigationManager.NavigateTo($"/updateflight/{flightModel.FlightId}");
+        }
+        else if (response == "Delete Flight")
+        {
+            Console.WriteLine("Delete Flight");
+        }
     }
 }
